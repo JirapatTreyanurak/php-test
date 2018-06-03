@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS member (
+    id  INT(10) ZEROFILL NOT NULL AUTO_INCREMENT,
+    username    VARCHAR(30),
+    PRIMARY KEY(id)
+);
