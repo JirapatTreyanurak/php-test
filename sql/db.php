@@ -1,24 +1,35 @@
 <?php
-$conn = new PDO(
-    "mysql:host={$config[db][host]};dbname={$config[db][dbname]}",
-    $config[db][username],
-    $config[db][password]
-);
 
-if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
-}
+$db = new Database();
 
-function getMembers () {
-    global $conn;
-    $stmt = $conn->prepare("SELECT username FROM member ORDER BY username");
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $results;
-}
+class Database {
+    
+    private $connection;
 
-foreach (getMembers() as $row) {
-    echo htmlentities($row[username]);
+    function __construct () {
+        global $config;
+        $this->connection = new PDO(
+            "mysql:host={$config["db"]["host"]};dbname={$config["db"]["dbname"]}",
+            $config["db"]["username"],
+            $config["db"]["password"]
+        );
+        if ($this->connection->connect_error) {
+            die("Failed to connect to the database: " . $this->connection->connect_error);
+        }
+    }
+
+    function __destruct () {
+        $this->connection->close();
+    }
+
+    function getMembers () {
+        $stmt = $this->connection->prepare(
+            "SELECT username FROM member ORDER BY username"
+        );
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
 
 ?>
