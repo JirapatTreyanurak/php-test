@@ -9,8 +9,16 @@ if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
 
-$stmt = $conn->prepare("SELECT username FROM members ORDER BY username");
-$stmt->execute();
-$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-print_r($results);
+function getMembers () {
+    global $conn;
+    $stmt = $conn->prepare("SELECT username FROM member ORDER BY username");
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $results;
+}
+
+foreach (getMembers() as $row) {
+    echo htmlentities($row[username]);
+}
+
 ?>
