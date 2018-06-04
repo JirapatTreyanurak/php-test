@@ -19,7 +19,7 @@ class Database {
     }
 
     function __destruct () {
-        $this->connection->close();
+        $this->connection = null;
     }
 
     function getMembers () {
@@ -27,7 +27,27 @@ class Database {
             "SELECT username FROM member ORDER BY username"
         );
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = null;
+        return $result;
+    }
+
+    function isAMember ($name) {
+        $stmt = $this->connection->prepare(
+            "SELECT username FROM member WHERE username = ?"
+        );
+        $stmt->execute(array($name));
+        $result = count($stmt->fetchAll(PDO::FETCH_ASSOC)) > 0;
+        $stmt = null;
+        return $result;
+    }
+
+    function register ($name) {
+        $stmt = $this->connection->prepare(
+            "INSERT INTO member (username) VALUE (?)"
+        );
+        $stmt->execute(array($name));
+        $stmt = null;
     }
 
 }

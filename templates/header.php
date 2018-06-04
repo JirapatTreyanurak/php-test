@@ -8,8 +8,3 @@
     <header>
         <h1>Stupid Website</h1>
     </header>
-    <nav>
-        <ul>
-            <li><a href="#">Home</a></li>
-        </ul>
-    </nav>

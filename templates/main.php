@@ -1,4 +1,16 @@
     <main>
+        <?php
+
+        $name = $_POST["username"];
+        if ($_POST["username"]) {
+            if ($db->isAMember($name)) {
+                echo "\t\t<p>Welcome back to Stupid website, " . $name . "!";
+            } else {
+                $db->register($name);
+                echo "\t\t<p>Welcome to Stupid website, " . $name . "!";
+            }
+        } else {
+        ?>
         <p>Welcome to Stupid website!<p>
         <p>Already a Stupid member? Log in!</p>
         <form action="#" method="post">
@@ -8,6 +20,7 @@
         </form>
         <p>New to Stupid? Don't worry! Just log in with your desired username!</p>
         <?php
+        }
 
         $members = $db->getMembers();
         if (count($members) == 0) {
